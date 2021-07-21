@@ -11,4 +11,5 @@ require (
 	github.com/tendermint/go-amino v0.15.1 // indirect
 	github.com/tendermint/tendermint v0.33.9
 	github.com/tomasen/realip v0.0.0-20180522021738-f0c99a92ddce
+	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 )
