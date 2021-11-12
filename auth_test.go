@@ -93,7 +93,7 @@ func TestGetMessageToSign(t *testing.T) {
 }
 
 func TestSign(t *testing.T) {
-	key := secp256k1.PrivKeySecp256k1{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32}
+	key := secp256k1.PrivKey{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32}
 
 	tt := []struct {
 		name string
@@ -133,8 +133,17 @@ func TestSign(t *testing.T) {
 
 			require.NoError(t, Sign(r, key))
 
-			assert.Equal(t, hex.EncodeToString(key.PubKey().Bytes()[5:]), r.Header.Get(PublicKeyHeader))
+			assert.Equal(t, hex.EncodeToString(key.PubKey().Bytes()), r.Header.Get(PublicKeyHeader))
 			assert.Equal(t, tc.signature, r.Header.Get(SignatureHeader))
 		})
 	}
+}
+
+func TestGetAddressFromPubKey(t *testing.T) {
+	key := secp256k1.PrivKey{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32}
+	pk := hex.EncodeToString(key.PubKey().Bytes())
+	require.Equal(t, "0284bf7562262bbd6940085748f3be6afa52ae317155181ece31b66351ccffa4b0", pk)
+	addr, err := GetAddressFromPubKey(pk)
+	require.NoError(t, err)
+	require.Equal(t, "cosmos1tp7fhly84qm6q4hhzmp0nh5frtdugmysu2r4sf", addr.String())
 }
